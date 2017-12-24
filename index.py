@@ -26,9 +26,11 @@ def welcome(message):
         user_exist = sql_functions.check_user(db_name, 'Users', chat_id)
         if user_exist == True:
             print("User already exists in db.")
+            bot.send_message(chat_id, "Hi, Welcome back. If you want any help, just send /help")
         else:
             print("Adding",f_name,"to db.")
             sql_functions.add_user(db_name, 'Users', chat_id, name)
+            bot.send_message(chat_id, "It appears you are new here. send /help to get help.")
 
     elif (chat_type == "group") | (chat_type == "supergroup"):
         print(chat_id,"is a group\n")
