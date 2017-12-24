@@ -13,11 +13,14 @@ sql_functions.create_table(db_name, 'Users', sql)
 
 bot = telebot.TeleBot('501737753:AAH_xjdeSe1pUg5cEBazOAFRTaYuqZUzbms') # Bot Token, obtained from @botfather
 
-keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-keyboard.row('/help','/catphoto')
-keyboard.row('/reminders')
-keyboard.row('/attendance')
-keyboard.row('/documents')
+keyboard_private = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+keyboard_private.row('/help','/catphoto')
+keyboard_private.row('/reminders')
+keyboard_private.row('/attendance')
+keyboard_private.row('/documents')
+
+keyboard_group = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+keyboard_group.row('/catphoto')
 
 @bot.message_handler(commands = ['start','hello']) # Reply to /start or /hello command
 def welcome(message):
@@ -32,15 +35,15 @@ def welcome(message):
         user_exist = sql_functions.check_user(db_name, 'Users', chat_id)
         if user_exist == True:
             print("User already exists in db.")
-            bot.send_message(chat_id, "Hi, Welcome back. If you want any help, just send /help", reply_markup=keyboard)
+            bot.send_message(chat_id, "Hi, Welcome back. If you want any help, just send /help", reply_markup=keyboard_private)
         else:
             print("Adding",f_name,"to db.")
             sql_functions.add_user(db_name, 'Users', chat_id, name)
-            bot.send_message(chat_id, "It appears you are new here. send /help to get help.", reply_markup=keyboard)
+            bot.send_message(chat_id, "It appears you are new here. send /help to get help.", reply_markup=keyboard_private)
 
     elif (chat_type == "group") | (chat_type == "supergroup"):
         print(chat_id,"is a group\n")
-        bot.send_message(chat_id, 'This is a group, and I hate crowd. PM me for a better bot experience.')
+        bot.send_message(chat_id, 'This is a group, and I hate crowd. PM me for a better bot experience.', reply_markup=keyboard_group)
 
     # bot.send_message(chat_id, 'Hello, What can I help you with?', reply_markup=keyboard)
     # print("welcome message send to",f_name)
