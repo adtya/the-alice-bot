@@ -1,5 +1,6 @@
 import telebot
 import sql_functions
+import urllib.request
 
 
 db_name = "alice.db"
@@ -12,6 +13,11 @@ sql_functions.create_table(db_name, 'Users', sql)
 
 bot = telebot.TeleBot('501737753:AAH_xjdeSe1pUg5cEBazOAFRTaYuqZUzbms') # Bot Token, obtained from @botfather
 
+keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+keyboard.row('/help','/catphoto')
+keyboard.row('/reminders')
+keyboard.row('/attendance')
+keyboard.row('/documents')
 
 @bot.message_handler(commands = ['start','hello']) # Reply to /start or /hello command
 def welcome(message):
@@ -26,20 +32,24 @@ def welcome(message):
         user_exist = sql_functions.check_user(db_name, 'Users', chat_id)
         if user_exist == True:
             print("User already exists in db.")
-            bot.send_message(chat_id, "Hi, Welcome back. If you want any help, just send /help")
+            bot.send_message(chat_id, "Hi, Welcome back. If you want any help, just send /help", reply_markup=keyboard)
         else:
             print("Adding",f_name,"to db.")
             sql_functions.add_user(db_name, 'Users', chat_id, name)
-            bot.send_message(chat_id, "It appears you are new here. send /help to get help.")
+            bot.send_message(chat_id, "It appears you are new here. send /help to get help.", reply_markup=keyboard)
 
     elif (chat_type == "group") | (chat_type == "supergroup"):
         print(chat_id,"is a group\n")
         bot.send_message(chat_id, 'This is a group, and I hate crowd. PM me for a better bot experience.')
 
-    # keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-    # keyboard.row('\U0001F4D7 Documents', '\U0001F4D7 Reminders')
-    # keyboard.row('\U0001F4D7 Today\'s Schedule', '\U0001F4D7 Attendance')
     # bot.send_message(chat_id, 'Hello, What can I help you with?', reply_markup=keyboard)
     # print("welcome message send to",f_name)
 
+@bot.message_handler(commands = ['catphoto'])
+def cat(message):
+    chat_id = message.chat.id
+    print("someone requested for a kitty")
+    photo = urllib.request.urlopen('http://thecatapi.com/api/images/get').read()
+    print("Kitty launched.\n")
+    bot.send_photo(chat_id, photo)
 bot.polling(none_stop=True)
