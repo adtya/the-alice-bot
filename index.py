@@ -27,7 +27,7 @@ sql_functions.create_table(db_name, 'Users', sql_users)
 bot = telebot.TeleBot('501737753:AAH_xjdeSe1pUg5cEBazOAFRTaYuqZUzbms') # Bot Token, obtained from @botfather
 
 keyboard_private = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-keyboard_private.row('/help','/catphoto','/whatsmytelegramid')
+keyboard_private.row('/help')
 keyboard_private.row('/reminders')
 keyboard_private.row('/attendance')
 keyboard_private.row('/documents')
@@ -57,11 +57,10 @@ def welcome(message):
         print(chat_id,"is a group\n")
         bot.send_message(chat_id, 'This is a group, and I hate crowd. PM me for a better bot experience.')
 
-    # bot.send_message(chat_id, 'Hello, What can I help you with?', reply_markup=keyboard)
-    # print("welcome message send to",f_name)
+    
 
 # This launches kitties into orbit.
-@bot.message_handler(commands = ['catphoto']) # Reply to /catphoto command
+@bot.message_handler(commands = ['cat']) # Reply to /cat command (#EASTEREGG)
 def cat(message):
     chat_id = message.chat.id
     f_name = message.from_user.first_name
@@ -79,7 +78,13 @@ def telegramid(message):
     chat_id = message.chat.id
     f_name = message.from_user.first_name
     print(f_name,"asked for telegram ID.\n")
-    bot.send_message(chat_id,chat_id, reply_markup=keyboard_private)
+    bot.send_message(chat_id, chat_id, reply_markup=keyboard_private)
+
+@bot.message_handler(commands = ['help'])
+def helper(message):
+    chat_id = message.chat.id
+    print("Help requested.")
+    bot.send_message(chat_id, "You can send\n1. /reminders to get ")
 
 
 bot.polling(none_stop=True)
