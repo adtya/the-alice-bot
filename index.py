@@ -19,13 +19,13 @@ def welcome(message):
 
     if chat_type == "private":
         print(f_name,"with id",chat_id,"is a user.")
-        user_exist = sql_functions.check_user(db_name, 'Users', chat_id)
+        user_exist = sql_functions.check_user(alice_vars.db_name, 'Users', chat_id)
         if user_exist == True:
             print("User already exists in db.")
             bot.send_message(chat_id, "Hi, Welcome back. If you want any help, just send /help", reply_markup=alice_vars.keyboard_default)
         else:
             print("Adding",f_name,"to db.")
-            sql_functions.add_user(db_name, 'Users', chat_id, name)
+            sql_functions.add_user(alice_vars.db_name, 'Users', chat_id, name)
             bot.send_message(chat_id, "It appears you are new here. send /help to get help.", reply_markup=alice_vars.keyboard_default)
 
 
@@ -41,7 +41,7 @@ def cat(message):
     chat_id = message.chat.id
     f_name = message.from_user.first_name
     print(f_name,"requested for a kitty")
-    photo = urllib.request.urlopen('http://www.thecatapi.com/api/images/get').read()
+    photo = urllib.request.urlopen('http://www.thecatapi.com/api/images/get')
     if chat_id < 0:
         bot.send_photo(chat_id, photo)
         print("Kitty launched.\n")
@@ -65,13 +65,13 @@ def helper(message):
 @bot.message_handler(commands = ['addadmin'])
 def addadmin(message):
     chat_id = message.chat.id
-    admin_exist = sql_functions.check_user(db_name, )
+    admin_exist = sql_functions.check_user(alice_vars.db_name, )
 
 
 @bot.message_handler(commands = ['addreminder'])
 def addremind(message):
     chat_id = message.chat.id
-    user_exist = sql_functions.check_user(db_name, 'Admins', chat_id)
+    user_exist = sql_functions.check_user(alice_vars.db_name, 'Admins', chat_id)
     if user_exist == False:
         bot.send_message(chat_id, "Oops! You're not a bot Admin. This incident will be reported.", markup=alice_vars.keyboard_default)
         print(message.from_user.first_name, "thinks he's an admin.")
