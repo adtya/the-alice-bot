@@ -8,10 +8,10 @@ def create_table(db_name, table_name, sql):
         result = cursor.fetchall()
         if len(result) == 0:
             cursor.execute(sql)
-            print("Table "+ table_name +" created\n")
+            print("Table "+ table_name +" created.")
             db.commit();
         else:
-            print("Using existing table\n")
+            print("Using existing table", table_name)
 
 def check_user(db_name, table_name, user_id):
     with sqlite3.connect(db_name) as db:
