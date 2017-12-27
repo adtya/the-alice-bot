@@ -41,7 +41,7 @@ def cat(message):
     chat_id = message.chat.id
     f_name = message.from_user.first_name
     print(f_name,"requested for a kitty")
-    photo = urllib.request.urlopen('http://thecatapi.com/api/images/get').read()
+    photo = urllib.request.urlopen('http://www.thecatapi.com/api/images/get').read()
     if chat_id < 0:
         bot.send_photo(chat_id, photo)
         print("Kitty launched.\n")
