@@ -39,3 +39,5 @@ keyboard_default.row('/help')
 keyboard_default.row('/reminders')
 keyboard_default.row('/attendance')
 keyboard_default.row('/documents')
+
+superuser = 371847809
