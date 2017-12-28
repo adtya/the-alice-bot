@@ -3,6 +3,7 @@ import sql_functions
 import urllib.request
 import alice_vars
 from alice_vars import bot
+import bot_functions
 
 
 for table in alice_vars.tables.keys():
@@ -32,8 +33,6 @@ def welcome(message):
     elif (chat_type == "group") | (chat_type == "supergroup"):
         print(chat_id,"is a group\n")
         bot.send_message(chat_id, 'This is a group, and I hate crowd. PM me for a better bot experience.')
-
-
 
 # This launches kitties into orbit.
 @bot.message_handler(commands = ['cat']) # Reply to /cat command (#EASTEREGG)
@@ -65,7 +64,9 @@ def helper(message):
 @bot.message_handler(commands = ['addadmin'])
 def addadmin(message):
     chat_id = message.chat.id
-    admin_exist = sql_functions.check_user(alice_vars.db_name, )
+    if chat_id == alice_vars.superuser:
+        msg = bot.reply_tp(message, "What's the ID you want to add to Admins?")
+        bot.register_next_step_handler(msg, bot_functions.get_admin_id)
 
 
 @bot.message_handler(commands = ['addreminder'])
