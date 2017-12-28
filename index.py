@@ -65,8 +65,8 @@ def helper(message):
 def addadmin(message):
     chat_id = message.chat.id
     if chat_id == alice_vars.superuser:
-        msg = bot.reply_tp(message, "What's the ID you want to add to Admins?")
-        bot.register_next_step_handler(msg, bot_functions.get_admin_id)
+        msg = bot.reply_to(message, "What's the ID you want to add to Admins?")
+        bot.register_next_step_handler(msg, bot_functions.add_admin)
 
 
 @bot.message_handler(commands = ['addreminder'])
