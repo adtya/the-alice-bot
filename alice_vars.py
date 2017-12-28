@@ -11,7 +11,6 @@ sql_users = """create table Users(
 
 sql_docs = """create table Docs(
         ID integer,
-        link text,
         Subject text,
         Module integer,
         Department text,
