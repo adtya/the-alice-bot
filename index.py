@@ -39,11 +39,12 @@ def welcome(message):
 def cat(message):
     easter_eggs.cat(message)
 
+# how about some motivation?
 @bot.message_handler(commands = ['quote'])
 def quote(message):
     easter_eggs.quote(message)
 
-
+# wanna know your telegram ID?
 @bot.message_handler(commands = ['whatsmytelegramid'])
 def telegramid(message):
     chat_id = message.chat.id
@@ -55,7 +56,10 @@ def telegramid(message):
 def helper(message):
     chat_id = message.chat.id
     print("Help requested.")
-    bot.send_message(chat_id, "You can send\n1. /reminders to get ")
+    if sql_functions.check_user(alice_vars.db_name, 'Admins', chat_id):
+        bot.send_message(chat_id, alice_vars.helpmsg_default+ alice_vars.helpmsg_admin+ alice_vars.helpmsg_feedback, reply_markup=alice_vars.keyboard_admin)
+    else:
+        bot.send_message(chat_id, alicevars.helpmsg_default+alice_vars.helpmsg_feedback, reply_markup=keyboard_default)
 
 @bot.message_handler(commands = ['addadmin'])
 def addadmin(message):
