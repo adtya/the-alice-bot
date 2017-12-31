@@ -9,11 +9,11 @@ def add_admin(message):
         print(admin_id, "will be added to admins.")
         if isinstance(admin_id, int):
             sql_functions.add_admin(alice_vars.db_name, 'Admins', admin_id)
-            bot.send_message(message.chat.id, str(admin_id)+" added to Admins.", markup=alice_vars.keyboard_admin)
+            bot.send_message(message.chat.id, str(admin_id)+" added to Admins.", reply_markup=alice_vars.keyboard_admin)
         else:
             raise Exception()
     except Exception as e:
-        bot.send_message(message.chat.id, "oops! something went wrong. try again.", markup=alice_vars.keyboard_admin)
+        bot.send_message(message.chat.id, "oops! something went wrong. try again.", reply_markup=alice_vars.keyboard_admin)
 
 def feedback(message):
     chat_id = message.chat.id
