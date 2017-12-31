@@ -1,5 +1,7 @@
 import telebot
 
+bot = telebot.TeleBot('501737753:AAH_xjdeSe1pUg5cEBazOAFRTaYuqZUzbms') # Bot Token, obtained from @botfather
+
 db_name = "alice.db"
 
 sql_users = """create table Users(
@@ -13,6 +15,13 @@ sql_docs = """create table Docs(
         ID integer,
         Subject text,
         Module integer,
+        Type text,
+        Department text,
+        primary key(ID))"""
+
+sql_syllabus = """create table Syllabus(
+        ID integer,
+        Subject text,
         Department text,
         primary key(ID))"""
 
@@ -28,21 +37,34 @@ sql_admins = """create table Admins(
         ID integer,
         primary key(ID))"""
 
-tables = {'Admins': sql_admins, 'Users': sql_users, 'Docs': sql_docs, 'Reminders': sql_remind}
+sql_feedback = """create table Feedback(
+        ID integer,
+        user text,
+        content text,
+        primary key(ID))"""
 
+tables = {'Admins': sql_admins, 'Users': sql_users, 'Docs': sql_docs, 'Syllabus': sql_syllabus, 'Reminders': sql_remind, 'Feedback': sql_feedback }
 
-bot = telebot.TeleBot('501737753:AAH_xjdeSe1pUg5cEBazOAFRTaYuqZUzbms') # Bot Token, obtained from @botfather
+# Departments and Subjects
+depts = ['CS', 'EC', 'EEE', 'EB']
+subjects = {'CS': ['BE', 'COA', 'DBMS', 'OODP', 'OS', 'PDT', 'DSLab', 'OSLab'], 'EC': [], 'EEE': [], 'EB': [] }
 
 keyboard_default = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
 keyboard_default.row('/help', '/quote')
 keyboard_default.row('/reminders')
-keyboard_default.row('/documents')
-keyboard_default.row('/whatsmytelegramid')
+keyboard_default.row('/documents', '/syllabus')
+keyboard_default.row('/whatsmytelegramid', '/feedback')
 
 keyboard_admin = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-keyboard_admin.row('/help')
+keyboard_admin.row('/help', '/quote')
 keyboard_admin.row('/adddocs', '/addreinders')
-keyboard_admin.row('docs', '/reminders')
+keyboard_admin.row('/documents', '/reminders')
+keyboard_admin.row('/whatsmytelegramid', '/feedback')
+
+keyboard_modules = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+keyboard_modules.row('1', '2')
+keyboard_modules.row('3', '4')
+keyboard_modules.row('5', '6')
 
 
 superuser = [371847809, ]

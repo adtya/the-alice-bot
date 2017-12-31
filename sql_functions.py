@@ -42,3 +42,26 @@ def add_admin(db_name, table_name, user_id):
             print(user_id,"added\n")
         else:
             print("User is already an Admin.\n")
+
+def add_feedback(db_name, teble_name, name, text):
+    with sqlite3.connect(db_name) as db:
+        cursor = db.cursor()
+        sql_exec = "insert into "+table_name+"(name, content)"+"\nvalues(\'"+name+"\',\'"+text+"\')"
+        cursor.execute(sql_exec)
+        print("feedback recorded")
+
+def read_feedback(db_name, table_name):
+    with sqlite3.connect(db_name) as db:
+        cursor = db.cursor()
+        sql_exec = "select ID from \'"+table_name+"\'"
+        cursor.execute(sql_exec)
+        result = cursor.fetchall()
+        return result[0]
+
+def feedback_fetch(db_name, table_name, entry):
+    with sqlite3.connect(db_name) as db:
+        cursor = db.cursor()
+        sql_exec = "select content from \'"+table_name+" where ID="+str(entry)
+        cursor.execute(sql_exec)
+        result = cursor.fetchall()[0][0]
+        return result

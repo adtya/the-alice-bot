@@ -67,6 +67,8 @@ def addadmin(message):
     if chat_id in alice_vars.superuser:
         msg = bot.reply_to(message, "What's the ID you want to add to Admins?")
         bot.register_next_step_handler(msg, bot_functions.add_admin)
+    else:
+        bot.send_message(chat_id, "oops! you're not a superuser.")
 
 
 @bot.message_handler(commands = ['addreminder'])
@@ -82,12 +84,17 @@ def addremind(message):
 @bot.message_handler(commands = ['feedback'])
 def sendfeedback(message):
     chat_id = message.chat.id
-    with open("feedback.txt",'a+') as feedback_file:
-        if chat_id == alice_vars.superuser:
-           feedback_file.read()
-        else:
-           feedback_text = input("You were saying?")
-           feedback_file.write(chat_id + " said " + feedback_text)
+    if chat_id in alice_vars.superuser:
+        result = sql_functions.read_feedback(alice_vars.db_name, 'Feedback')
+        feedback_msg = ""
+        for entry in result:
+            feedback_msg = feedback_msg+"\n"+str(entry)+": "+sql_functions.feedback_fetch(alice_vars.db_name, 'Feedback', entry)
+        bot.send_message(chat_id, feedback_msg, reply_markup = alice_vars.keyboard_admin)
+
+    else:
+        msg = bot.send_message(chat_id, "So, What do you think about me ?")
+        bot.register_next_step_handler(msg, bot_functions.feedback)
+
 
 
 bot.polling(none_stop=True)
