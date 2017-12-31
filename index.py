@@ -4,7 +4,7 @@ import urllib.request
 import alice_vars
 from alice_vars import bot
 import bot_functions
-
+import easter_eggs.py
 
 for table in alice_vars.tables.keys():
     sql_functions.create_table(alice_vars.db_name, table, alice_vars.tables[table])
@@ -35,18 +35,7 @@ def welcome(message):
         bot.send_message(chat_id, 'This is a group, and I hate crowd. PM me for a better bot experience.')
 
 # This launches kitties into orbit.
-@bot.message_handler(commands = ['cat']) # Reply to /cat command (#EASTEREGG)
-def cat(message):
-    chat_id = message.chat.id
-    f_name = message.from_user.first_name
-    print(f_name,"requested for a kitty")
-    photo = urllib.request.urlopen('http://www.thecatapi.com/api/images/get')
-    if chat_id < 0:
-        bot.send_photo(chat_id, photo)
-        print("Kitty launched.\n")
-    elif chat_id > 0:
-        bot.send_photo(chat_id, photo, reply_markup=alice_vars.keyboard_default)
-        print("Kitty launched.\n")
+
 
 @bot.message_handler(commands = ['whatsmytelegramid'])
 def telegramid(message):
@@ -79,5 +68,15 @@ def addremind(message):
     else:
         print("Adding new reminder.")
 
-
+@bot.message_handler(commands = ['feedback'])
+def sendfeedback(message):
+    chat_id = message.chat.id
+    with open("feedback.txt",'a+') as feedback_file
+        if chat_id == alice_vars.superuser:
+           feedback_file.read()
+        else:
+           feedback_text = input("You were saying?")
+           feedback_file.write(chat_id + " said " + feedback_text)
+       
+        
 bot.polling(none_stop=True)
