@@ -26,8 +26,10 @@ def welcome(message):
             bot.send_message(chat_id, "Hi, Welcome back. If you want any help, just send /help", reply_markup=alice_vars.keyboard_default)
         else:
             print("Adding",f_name,"to db.")
-            sql_functions.add_user(alice_vars.db_name, 'Users', chat_id, name)
-            bot.send_message(chat_id, "It appears you are new here. send /help to get help.", reply_markup=alice_vars.keyboard_default)
+            # sql_functions.add_user(alice_vars.db_name, 'Users', chat_id, name)
+            # bot.send_message(chat_id, "It appears you are new here. send /help to get help.", reply_markup=alice_vars.keyboard_default)
+            msg = bot.send_message(chat_id, "Hi, "+f_name+" May I know your class?", reply_markup=alice_vars.keyboard_classes)
+            bot.register_next_step_handler(msg, bot_functions.add_user)
 
 
     elif (chat_type == "group") | (chat_type == "supergroup"):
@@ -59,7 +61,7 @@ def helper(message):
     if sql_functions.check_user(alice_vars.db_name, 'Admins', chat_id):
         bot.send_message(chat_id, alice_vars.helpmsg_default+ alice_vars.helpmsg_admin+ alice_vars.helpmsg_feedback, reply_markup=alice_vars.keyboard_admin)
     else:
-        bot.send_message(chat_id, alicevars.helpmsg_default+alice_vars.helpmsg_feedback, reply_markup=keyboard_default)
+        bot.send_message(chat_id, alice_vars.helpmsg_default+alice_vars.helpmsg_feedback, reply_markup=keyboard_default)
 
 @bot.message_handler(commands = ['addadmin'])
 def addadmin(message):
@@ -68,7 +70,7 @@ def addadmin(message):
         msg = bot.reply_to(message, "What's the ID you want to add to Admins?")
         bot.register_next_step_handler(msg, bot_functions.add_admin)
     else:
-        bot.send_message(chat_id, "oops! you're not a superuser.")
+        bot.send_message(chat_id, "oops! you're not a superuser. Only a superuser can add new admins.")
 
 
 @bot.message_handler(commands = ['addreminder'])
@@ -76,21 +78,33 @@ def addremind(message):
     chat_id = message.chat.id
     user_exist = sql_functions.check_user(alice_vars.db_name, 'Admins', chat_id)
     if user_exist == False:
-        bot.send_message(chat_id, "Oops! You're not a bot Admin. This incident will be reported.", markup=alice_vars.keyboard_default)
+        bot.send_message(chat_id, "Oops! You're not a bot Admin.", markup=alice_vars.keyboard_default)
         print(message.from_user.first_name, "thinks he's an admin.")
     else:
         print("Adding new reminder.")
+
+@bot.message_handler(commands = ['adddocs'])
+def adddocs(message):
+    chat_id = message.chat.id
+    user_exist = sql_functions.check_user(alice_vars.db_name, 'Admins', chat_id)
+    if user_exist == False:
+        bot.send_message(chat_id, "Oops! You're not a bot Admin.", markup=alice_vars.keyboard_default)
+        print(message.from_user.first_name, "thinks he's an admin.")
+    else:
+         
 
 @bot.message_handler(commands = ['feedback'])
 def sendfeedback(message):
     chat_id = message.chat.id
     if chat_id in alice_vars.superuser:
         result = sql_functions.read_feedback(alice_vars.db_name, 'Feedback')
-        feedback_msg = ""
-        for entry in result:
-            feedback_msg = feedback_msg+"\n"+str(entry)+": "+sql_functions.feedback_fetch(alice_vars.db_name, 'Feedback', entry)
-        bot.send_message(chat_id, feedback_msg, reply_markup = alice_vars.keyboard_admin)
-
+        if result == False:
+            bot.send_message(chat_id, "No feedbacks recorded yet!", reply_markup = alice_vars.keyboard_admin)
+        else:
+            feedback_msg = ""
+            for entry in result:
+                feedback_msg = feedback_msg+"\n"+str(entry)+": "+sql_functions.feedback_fetch(alice_vars.db_name+"\n\n", 'Feedback', entry)
+            bot.send_message(chat_id, feedback_msg, reply_markup = alice_vars.keyboard_admin)
     else:
         msg = bot.send_message(chat_id, "So, What do you think about me ?")
         bot.register_next_step_handler(msg, bot_functions.feedback)

@@ -23,10 +23,10 @@ def check_user(db_name, table_name, user_id):
         else:
             return False
 
-def add_user(db_name, table_name, user_id, user_name):
+def add_user(db_name, table_name, user_id, user_name, user_class):
     with sqlite3.connect(db_name) as db:
         cursor = db.cursor()
-        sql_exec = "insert into "+table_name+"(ID,Name)"+"\nvalues("+str(user_id)+",\'"+user_name+"\')"
+        sql_exec = "insert into "+table_name+"(ID,Name,Class)"+"\nvalues("+str(user_id)+",\'"+user_name+"\',\'"+user_class+"\')"
         cursor.execute(sql_exec)
         print(user_name,"added\n")
 
@@ -51,12 +51,15 @@ def add_feedback(db_name, teble_name, name, text):
         print("feedback recorded")
 
 def read_feedback(db_name, table_name):
-    with sqlite3.connect(db_name) as db:
-        cursor = db.cursor()
-        sql_exec = "select ID from \'"+table_name+"\'"
-        cursor.execute(sql_exec)
-        result = cursor.fetchall()
-        return result[0]
+    try:
+        with sqlite3.connect(db_name) as db:
+            cursor = db.cursor()
+            sql_exec = "select ID from \'"+table_name+"\'"
+            cursor.execute(sql_exec)
+            result = cursor.fetchall()
+            return result[0]
+    except Exception as e:
+        return False
 
 def feedback_fetch(db_name, table_name, entry):
     with sqlite3.connect(db_name) as db:

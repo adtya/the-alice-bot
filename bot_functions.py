@@ -3,6 +3,16 @@ import sql_functions
 import alice_vars
 from alice_vars import bot
 
+def add_user(message):
+    user_class = message.text
+    chat_id = message.chat.id
+    f_name = message.from_user.first_name
+    l_name = message.from_user.last_name
+    name = f_name+" "+l_name
+    sql_functions.add_user(alice_vars.db_name, 'Users', chat_id, name, user_class)
+    bot.send_message(chat_id, "It appears you are new here. send /help to get help.", reply_markup=alice_vars.keyboard_default)
+
+
 def add_admin(message):
     try:
         admin_id = int(message.text)
