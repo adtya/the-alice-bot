@@ -22,10 +22,14 @@ def cat(message):
         bot.send_message(chat_id, "oops! something went wrong! try again.", reply_markup=alice_vars.keyboard_default)
 
 def quote(message) :
+    chat_id = message.chat.id
+    if sql_functions.check_user(alice_vars.db_name, 'Admins', chat_id):
+        keyboard = alice_vars.keyboard_admin
+    else:
+        keyboard = alice_vars.keyboard_default
     try:
-        chat_id = message.chat.id
         quote = urllib.request.urlopen('http://quotes.rest/qod.json').read().decode('utf-8')
         quote_json = json.loads(quote)
         bot.send_message(chat_id, "Quote of the day:\n\n", quote_json['contents']['quotes'][0]['quote'],"\n", quote_json['contents']['quotes'][0]['author'], reply_markup=alice_vars.keyboard_default)
     except Exception as e:
-        bot.send_message(chat_id, "oops! something went wrong! try again.", reply_markup=alice_vars.keyboard_default)
+        bot.send_message(chat_id, "oops! something went wrong! try again.", reply_markup=keyboard)
