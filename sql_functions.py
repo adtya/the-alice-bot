@@ -57,7 +57,7 @@ def get_docs(db_name, docs):
         result=cursor.fetchall()
         return result[0]
 
-def add_feedback(db_name, teble_name, name, text):
+def add_feedback(db_name, table_name, name, text):
     with sqlite3.connect(db_name) as db:
         cursor = db.cursor()
         sql_exec = "insert into "+table_name+"(name, content)"+"\nvalues(\'"+name+"\',\'"+text+"\')"
