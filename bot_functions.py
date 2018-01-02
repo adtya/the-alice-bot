@@ -35,7 +35,7 @@ def feedback(message):
         keyboard = alice_vars.keyboard_admin
     else:
         keyboard = alice_vars.keyboard_default
-    name = message.from_user.first_name+message.from_user.last_name
+    name = message.from_user.first_name+" "+message.from_user.last_name
     text = message.text
     try:
         sql_functions.add_feedback(alice_vars.db_name, 'Feedback', name, text)
