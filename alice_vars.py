@@ -11,16 +11,9 @@ sql_users = """create table Users(
         primary key(ID))"""
 
 sql_docs = """create table Docs(
-        ID integer,
+        ID text,
         Subject text,
         Module integer,
-        Type text,
-        Department text,
-        primary key(ID))"""
-
-sql_syllabus = """create table Syllabus(
-        ID integer,
-        Subject text,
         Department text,
         primary key(ID))"""
 
@@ -42,7 +35,7 @@ sql_feedback = """create table Feedback(
         content text,
         primary key(ID))"""
 
-tables = {'Admins': sql_admins, 'Users': sql_users, 'Docs': sql_docs, 'Syllabus': sql_syllabus, 'Reminders': sql_remind, 'Feedback': sql_feedback }
+tables = {'Admins': sql_admins, 'Users': sql_users, 'Docs': sql_docs, 'Reminders': sql_remind, 'Feedback': sql_feedback }
 
 # Departments and Subjects
 depts = ['CS', 'EC', 'EEE', 'EB']
@@ -61,6 +54,7 @@ keyboard_admin.row('/documents', '/reminders')
 keyboard_admin.row('/whatsmytelegramid', '/feedback')
 
 keyboard_modules = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+keyboard_modules.row('0')
 keyboard_modules.row('1', '2')
 keyboard_modules.row('3', '4')
 keyboard_modules.row('5', '6')

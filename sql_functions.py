@@ -43,6 +43,12 @@ def add_admin(db_name, table_name, user_id):
         else:
             print("User is already an Admin.\n")
 
+def add_docs(db_name, docs):
+    with sqlite3.connect(db_name) as db:
+        cursor = db.cursor()
+        sql_exec = "insert into Docs(ID, Subject, Module, Department)"+"\nvalues(\'"+docs['id']+"\',\'"+docs['subject']+"\',\'"+str(docs['module'])+"\',\'"+docs['dept']+"\')"
+        cursor.execute(sql_exec)
+
 def add_feedback(db_name, teble_name, name, text):
     with sqlite3.connect(db_name) as db:
         cursor = db.cursor()

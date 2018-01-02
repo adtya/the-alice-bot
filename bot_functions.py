@@ -1,7 +1,10 @@
+import telebot
 import sqlite3
 import sql_functions
 import alice_vars
 from alice_vars import bot
+
+adddocs = {'dept': "", 'subject': "", 'module': "", 'id': ""}
 
 def add_user(message):
     user_class = message.text
@@ -38,3 +41,34 @@ def feedback(message):
         bot.send_message(chat_id, "Thanks! Your feedback has been recorded", reply_markup = keyboard)
     except Exception as e:
         bot.send_message(chat_id, "oops! something went wrong. Try again!", reply_markup = keyboard)
+
+def create_keyboard(items):
+    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2)
+    for item in items:
+        keyboard.add(item)
+    return keyboard
+
+def docs_dept(message):
+    chat_id = message.chat.id
+    adddocs['dept'] = message.text
+    msg = bot.send_message(chat_id, "Select a subject: ", reply_markup=create_keyboard(alice_vars.subjects[adddocs['dept']]))
+    bot.register_next_step_handler(msg, docs_subject)
+
+def docs_subject(message):
+    adddocs['subject'] = message.text
+    msg = bot.send_message(message.chat.id, "Select a module(0 to upload the syllabus)", reply_markup=alice_vars.keyboard_modules)
+    bot.register_next_step_handler(msg, docs_module)
+
+def docs_module(message):
+    adddocs['module'] = int(message.text)
+    msg = bot.send_message(message.chat.id, "send me the document(pdf)")
+    bot.register_next_step_handler(msg, docs_upload)
+
+def docs_upload(message):
+    doc_type = message.document.mime_type.split('/')[-1]
+    if not (doc_type == 'pdf'):
+        bot.send_message(message.chat.id, "Please send a pdf file", reply_markup=alice_vars.keyboard_admin)
+    else:
+        adddocs['id'] = message.document.file_id
+        sql_functions.add_docs(alice_vars.db_name, adddocs)
+        bot.send_message(message.chat.id, "Document uploaded successfully.", reply_markup=alice_vars.keyboard_admin)
