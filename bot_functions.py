@@ -5,6 +5,7 @@ import alice_vars
 from alice_vars import bot
 
 adddocs = {'dept': "", 'subject': "", 'module': "", 'id': ""}
+docs = {'dept': "", 'subject': "", 'module': ""}
 
 def add_user(message):
     user_class = message.text
@@ -72,3 +73,23 @@ def docs_upload(message):
         adddocs['id'] = message.document.file_id
         sql_functions.add_docs(alice_vars.db_name, adddocs)
         bot.send_message(message.chat.id, "Document uploaded successfully.", reply_markup=alice_vars.keyboard_admin)
+
+def dept(message):
+    docs['dept'] = message.text
+    msg = bot.send_message(message.chat.id, "Select a subject:",  reply_markup=create_keyboard(alice_vars.subjects[docs['dept']]))
+    bot.register_next_step_handler(msg, subject)
+
+def subject(message):
+    docs['subject'] = message.text
+    msg = bot.send_message(message.chat.id, "Select a module(0 for syllabus)", reply_markup=alice_vars.keyboard_modules)
+    bot.register_next_step_handler(msg, module)
+
+def module(message):
+    if sql_functions.check_user(alice_vars.db_name, 'Admins', message.chat.id):
+        keyboard = alice_vars.keyboard_admin
+    else:
+        keyboard = alice_vars.keyboard_default
+    docs['module'] = int(message.text)
+    results = sql_functions.get_docs(alice_vars.db_name, docs)
+    for result in results:
+        bot.send_document(message.chat.id, result, reply_markup = keyboard)

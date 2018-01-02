@@ -96,6 +96,12 @@ def adddocs(message):
         msg = bot.send_message(chat_id, "Select the Department: ", reply_markup=bot_functions.create_keyboard(alice_vars.depts))
         bot.register_next_step_handler(msg, bot_functions.docs_dept)
 
+@bot.message_handler(commands = ['documents'])
+def docs(message):
+    chat_id = message.chat.id
+    msg = bot.send_message(chat_id, "Select the department:", reply_markup=bot_functions.create_keyboard(alice_vars.depts))
+    bot.register_next_step_handler(msg, bot_functions.dept)
+
 @bot.message_handler(commands = ['feedback'])
 def sendfeedback(message):
     chat_id = message.chat.id
