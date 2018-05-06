@@ -1,6 +1,3 @@
-import os
-from flask import Flask, request
-
 import telebot
 import sql_functions
 import urllib.request
@@ -9,8 +6,6 @@ from alice_vars import bot
 import bot_functions
 import easter_eggs
 
-TOKEN = '494032655:AAGsEp-FK1pxHLJc0Prz2mSh75p_gHxOCbk'
-server = Flask(__name__)
 
 for table in alice_vars.tables.keys():
     sql_functions.create_table(alice_vars.db_name, table, alice_vars.tables[table])
@@ -126,18 +121,5 @@ def sendfeedback(message):
 
 
 
-@server.route('/' + TOKEN, method=['POST'])
-def getMessage():
-    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-    return "!", 200
-
-
-@server.route("/")
-def webhook():
-    bot.remove_webhook()
-    bot.set_webhook(url='https://calm-peak-31144.herokuapp.com/' + TOKEN)
-    return "!", 200
-
-
 if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+    bot.polling()
