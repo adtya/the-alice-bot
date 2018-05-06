@@ -9,7 +9,7 @@ from alice_vars import bot
 import bot_functions
 import easter_eggs
 
-TOKEN = ''
+TOKEN = '494032655:AAGsEp-FK1pxHLJc0Prz2mSh75p_gHxOCbk'
 server = Flask(__name__)
 
 for table in alice_vars.tables.keys():
@@ -135,7 +135,7 @@ def getMessage():
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url='https://your_heroku_project.com/' + TOKEN)
+    bot.set_webhook(url='https://calm-peak-31144.herokuapp.com/' + TOKEN)
     return "!", 200
 
 

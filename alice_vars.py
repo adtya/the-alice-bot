@@ -1,6 +1,6 @@
 import telebot
 
-bot = telebot.TeleBot('') # Bot Token, obtained from @botfather
+bot = telebot.TeleBot('494032655:AAGsEp-FK1pxHLJc0Prz2mSh75p_gHxOCbk') # Bot Token, obtained from @botfather
 
 db_name = "alice.db"
 
