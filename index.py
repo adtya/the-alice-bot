@@ -1,3 +1,6 @@
+import os
+from flask import Flask, request
+
 import telebot
 import sql_functions
 import urllib.request
@@ -5,6 +8,9 @@ import alice_vars
 from alice_vars import bot
 import bot_functions
 import easter_eggs
+
+TOKEN = ''
+server = Flask(__name__)
 
 for table in alice_vars.tables.keys():
     sql_functions.create_table(alice_vars.db_name, table, alice_vars.tables[table])
@@ -30,7 +36,7 @@ def welcome(message):
                 bot.send_message(chat_id, "Hi, Welcome back. If you want any help, just send /help", reply_markup=alice_vars.keyboard_default)
         else:
             print("Adding",f_name,"to db.")
-            msg = bot.send_message(chat_id, "Hi, "+f_name+" May I know your class?", reply_markup=alice_vars.keyboard_classes)
+            msg = bot.send_message(chat_id, "Hi, "+ f_name +" May I know your class?", reply_markup=alice_vars.keyboard_classes)
             bot.register_next_step_handler(msg, bot_functions.add_user)
 
 
@@ -120,5 +126,18 @@ def sendfeedback(message):
 
 
 
+@server.route('/' + TOKEN, method=['POST'])
+def getMessage():
+    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+    return "!", 200
 
-bot.polling(none_stop=True)
+
+@server.route("/")
+def webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url='https://your_heroku_project.com/' + TOKEN)
+    return "!", 200
+
+
+if __name__ == "__main__":
+server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
