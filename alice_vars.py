@@ -3,7 +3,7 @@ import telebot
 # Bot Token, obtained from @botfather
 bot = telebot.TeleBot('494032655:AAGsEp-FK1pxHLJc0Prz2mSh75p_gHxOCbk')
 
-db_name = "alice.db"
+db_name = "db.sqlite3"
 
 sql_users = """create table Users(
         ID integer,

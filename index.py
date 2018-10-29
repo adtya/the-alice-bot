@@ -45,23 +45,20 @@ def welcome(message):
         bot.send_message(
             chat_id, 'This is a group, and I hate crowd. PM me for a better bot experience.')
 
+
 # This launches kitties into orbit.
-
-
 @bot.message_handler(commands=['cat'])  # Reply to /cat command (#EASTEREGG)
 def cat(message):
     easter_eggs.cat(message)
 
+
 # how about some motivation?
-
-
 @bot.message_handler(commands=['quote'])
 def quote(message):
     easter_eggs.quote(message)
 
+
 # wanna know your telegram ID?
-
-
 @bot.message_handler(commands=['whatsmytelegramid'])
 def telegramid(message):
     chat_id = message.chat.id
