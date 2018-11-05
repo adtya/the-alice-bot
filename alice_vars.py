@@ -1,7 +1,7 @@
 import telebot
 
 # Bot Token, obtained from @botfather
-bot = telebot.TeleBot('494032655:AAGsEp-FK1pxHLJc0Prz2mSh75p_gHxOCbk')
+bot = telebot.TeleBot("TOKEN obtained from @botfather")
 
 db_name = "db.sqlite3"
 
