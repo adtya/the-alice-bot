@@ -51,6 +51,17 @@ def feedback(message):
         bot.send_message(
             chat_id, "oops! something went wrong. Try again!", reply_markup=keyboard)
 
+#Creates Reminders. Debug with the help of Adithya
+def createReminder(message):
+    bot.send_message(message.chat_id,"Enter Title of the Reminder")
+    reminder_id = message.message_id
+    msg=bot.send_message(message.chat_id,"Describe the Reminder")
+    reminder_=description=gatherDescription(msg)
+    bot.send_message(message.chat_id,"Enter Date")
+    
+#Wrote this function because Hari is unable to understand how to take data from a message
+def gatherDescription(message):
+    return message.text
 
 def create_keyboard(items):
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2)
