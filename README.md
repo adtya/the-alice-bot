@@ -1,6 +1,8 @@
 ## Alice the Telegram Bot
 
   > use ``` pip install pyTelegramBotAPI ``` to install pyTelegramBotAPI
+
+  > set environment variable with ``` export TELEGRAMTOKEN=<your botfather token> ```
   
   > run using ``` python index.py ```
 

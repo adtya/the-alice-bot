@@ -1,7 +1,9 @@
 import telebot
+import os
 
 # Bot Token, obtained from @botfather
-bot = telebot.TeleBot("TOKEN obtained from @botfather")
+TELEGRAMTOKEN = os.environ['TELEGRAMTOKEN']
+bot = telebot.TeleBot(TELEGRAMTOKEN)
 
 db_name = "db.sqlite3"
 

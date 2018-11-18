@@ -18,7 +18,7 @@ def welcome(message):
     chat_id = message.chat.id
     f_name = message.from_user.first_name
     l_name = message.from_user.last_name
-    name = f_name+" "+l_name
+    # name = f_name+" "+l_name
 
     if chat_type == "private":
         print(f_name, "with id", chat_id, "is a user.")
