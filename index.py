@@ -90,6 +90,19 @@ def addadmin(message):
         bot.send_message(
             chat_id, "oops! you're not a superuser. Only a superuser can add new admins.")
 
+@bot.message_handler(commands=['reminder'])
+def readReminder(message):
+    chat_id=message.chat.id
+    result = sql_functions.getReminded(alice_vars.reminder)
+    if result == False:
+        bot.send_message(chat_id,"No works due")
+    else:
+        feedback_msg = ""
+        for entry in result:
+            reminderMsg = reminderMSg+"\n" + \
+                str(entry)+": "+sql_functions.reminder_fetch(alice_vars.db_name +
+                                                                 "\n\n", 'Reminder: ', entry)
+            bot.send_message(chat_id, reminderMsg,reply_markup=alice_vars.keyboard_default)
 
 @bot.message_handler(commands=['addreminder'])
 def addremind(message):
@@ -101,6 +114,8 @@ def addremind(message):
                          markup=alice_vars.keyboard_default)
         print(message.from_user.first_name, "thinks he's an admin.")
     else:
+        msg=send_message(message.chat_id,"Enter Reminder Title")
+        bot.register_next_step_handler(msg,bot_functions.createReminder)
         print("Adding new reminder.")
 
 
@@ -146,7 +161,6 @@ def sendfeedback(message):
     else:
         msg = bot.send_message(chat_id, "So, What do you think about me ?")
         bot.register_next_step_handler(msg, bot_functions.feedback)
-
 
 if __name__ == "__main__":
     bot.polling()

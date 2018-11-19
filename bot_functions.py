@@ -3,7 +3,7 @@ import sqlite3
 import sql_functions
 import alice_vars
 from alice_vars import bot
-
+import datetime
 adddocs = {'dept': "", 'subject': "", 'module': "", 'id': ""}
 docs = {'dept': "", 'subject': "", 'module': ""}
 
@@ -51,6 +51,23 @@ def feedback(message):
         bot.send_message(
             chat_id, "oops! something went wrong. Try again!", reply_markup=keyboard)
 
+#Creates Reminders. Debug with the help of Adithya
+def createReminder(message):
+    reminderDetails={}
+    reminderDetails['ID']=message.chat_id
+    bot.send_message(message.chat_id,"Enter Title of the Reminder")
+    reminderDetails['Title']=message.text
+    msg=bot.send_message(message.chat_id,"Describe the Reminder")
+    reminderDetails['Description']=gatherDescription(msg)
+    reminderDetails['DueDate']=getDate(bot.send_message(message.chat_id,"Enter Date"))
+    sql_functions.addReminder(alice_vars.db_name, reminderDetails)
+#Wrote this function because Hari is unable to understand how to take data from a message
+def gatherDescription(message):
+    return message.text
+
+def getDate(message):
+
+    return datetime.strptime(message.text)
 
 def create_keyboard(items):
     keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2)

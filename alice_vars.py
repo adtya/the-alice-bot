@@ -22,10 +22,9 @@ sql_docs = """create table Docs(
 
 sql_remind = """create table Reminders(
         ID integer,
-        title text,
-        description text,
-        class text,
-        date text,
+        Title text,
+        Description text,
+        DueDate date,
         primary key(ID))"""
 
 sql_admins = """create table Admins(
