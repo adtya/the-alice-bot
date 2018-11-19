@@ -51,6 +51,21 @@ def add_admin(db_name, table_name, user_id):
         else:
             print("User is already an Admin.\n")
 
+def addReminder(db_name, reminder):
+    with sqlite3.connect(db_name) as db:
+        cursor = db.cursor()
+        sql_exec = "insert into Reminders(ID, title, description, date)"+"\nvalues(\'" + \
+            reminder['ID']+"\',\'"+reminder['Title']+"\',\'" + \
+            reminder['Description']+"\',\'"+reminder['DueDate']+"\')"
+        cursor.execute(sql_exec)
+
+def getReminded(db_name, reminder):
+    with sqlite3.connect(db_name) as db:
+        cursor = db.cursor()
+        sql_exec = "select ID from Reminders where DueDate >= DATE(NOW())"
+        cursor.execute(sql_exec)
+        result = cursor.fetchall()
+        return result[0]
 
 def add_docs(db_name, docs):
     with sqlite3.connect(db_name) as db:
@@ -70,7 +85,6 @@ def get_docs(db_name, docs):
         cursor.execute(sql_exec)
         result = cursor.fetchall()
         return result[0]
-
 
 def add_feedback(db_name, table_name, name, text):
     with sqlite3.connect(db_name) as db:
@@ -97,6 +111,14 @@ def feedback_fetch(db_name, table_name, entry):
     with sqlite3.connect(db_name) as db:
         cursor = db.cursor()
         sql_exec = "select content from \'"+table_name+" where ID="+str(entry)
+        cursor.execute(sql_exec)
+        result = cursor.fetchall()[0][0]
+        return result
+
+def reminder_fetch(db_name, table_name, entry):
+    with sqlite3.connect(db_name) as db:
+        cursor = db.cursor()
+        sql_exec = "select Description from \'" +table_name+" where ID="+str(entry)
         cursor.execute(sql_exec)
         result = cursor.fetchall()[0][0]
         return result
