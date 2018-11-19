@@ -43,8 +43,8 @@ tables = {'Admins': sql_admins, 'Users': sql_users, 'Docs': sql_docs,
 
 # Departments and Subjects
 depts = ['CS', 'EC', 'EEE', 'EB']
-subjects = {'CS': ['BE', 'COA', 'DBMS', 'OODP', 'OS',
-                   'PDT', 'DSLab', 'OSLab'], 'EC': [], 'EEE': [], 'EB': []}
+subjects = {'CS': ['TOC', 'SS', 'GTC', 'MM', 'DC',
+                   'LCS', 'SC', 'DSLab', 'OSLab'], 'EC': [], 'EEE': [], 'EB': []}
 
 keyboard_default = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
 keyboard_default.row('/reminders')
